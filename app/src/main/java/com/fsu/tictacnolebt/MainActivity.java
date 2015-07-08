@@ -4,14 +4,38 @@ import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
-
+import android.widget.Button;
 
 public class MainActivity extends ActionBarActivity {
+
+    Button mTestFragmentButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        // Begin the application's execution by adding the game select fragment
+        //   (host/client/no BT).
+        // SOURCE: http://developer.android.com/training/basics/fragments/fragment-ui.html
+        GameSelectFragment gameSelectFragment = new GameSelectFragment();
+        getSupportFragmentManager().beginTransaction().add(R.id.fragment_container,
+                gameSelectFragment).commit();
+
+        /*
+        // Add a click listener to the 'Hello World'-style button that tests the use
+        //   of fragments.
+        // SOURCE: http://developer.android.com/training/basics/fragments/fragment-ui.html
+        mTestFragmentButton = (Button)findViewById(R.id.test_fragment_button);
+        mTestFragmentButton.setOnClickListener(new Button.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                GameSelectFragment gameSelectFragment = new GameSelectFragment();
+                getSupportFragmentManager().beginTransaction().add(R.id.fragment_container,
+                        gameSelectFragment).commit();
+            }
+        });
+        */
     }
 
     @Override

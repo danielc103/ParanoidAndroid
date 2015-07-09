@@ -9,6 +9,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.location.SettingInjectorService;
 import android.os.Bundle;
+import android.os.Debug;
 import android.widget.ArrayAdapter;
 import android.widget.Toast;
 
@@ -89,13 +90,13 @@ public class BluetoothConnect extends MainActivity {
     public void checkPaired(){
 
         //Array Adapter for paired list to choose from
-        //ArrayAdapter<String> mArrayAdapter = new ArrayAdapter<String>(this, android.R.layout.bt_paired_list);
+        ArrayAdapter<String> mArrayAdapter = new ArrayAdapter<String>(this, R.layout.bt_paired_list);
 
         Set<BluetoothDevice> pairedDevices = mBluetoothAdapter.getBondedDevices();
 
         if(pairedDevices.size() > 0){
             for (BluetoothDevice device : pairedDevices){
-                //mArrayAdapter.add(device.getName() + "\n" + device.getAddress());
+                mArrayAdapter.add(device.getName() + "\n" + device.getAddress());
             }
         }
 
@@ -147,7 +148,50 @@ public class BluetoothConnect extends MainActivity {
         }
 
     }
-    //TODO: Connect Thread extends Thread
+
+
+    private class ConnectThread extends Thread {
+        private final BluetoothSocket mmSocket;
+        private final BluetoothDevice mmDevice;
+
+        public ConnectThread(BluetoothDevice device){
+
+            BluetoothSocket tmp = null;
+            mmDevice = device;
+
+            try{
+                tmp = device.createRfcommSocketToServiceRecord(MY_UUID);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            mmSocket = tmp;
+        }
+
+
+        public void run(){
+            mBluetoothAdapter.cancelDiscovery();
+
+            try {
+                mmSocket.connect();
+
+                //pass socket
+
+            }catch (IOException connectException){
+                try {
+                    mmSocket.close();
+                }catch (IOException closeException){}
+                return;
+            }
+
+            //manageConnectedSocket(mmSocket);
+        }
+
+        public void cancel(){
+            try {
+                mmSocket.close();
+            }catch (IOException e) {}
+        }
+    }
 
 
 

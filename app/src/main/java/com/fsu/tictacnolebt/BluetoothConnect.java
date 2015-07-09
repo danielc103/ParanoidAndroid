@@ -9,6 +9,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.location.SettingInjectorService;
 import android.os.Bundle;
+import android.os.Debug;
 import android.widget.ArrayAdapter;
 import android.widget.Toast;
 
@@ -164,6 +165,31 @@ public class BluetoothConnect extends MainActivity {
                 e.printStackTrace();
             }
             mmSocket = tmp;
+        }
+
+
+        public void run(){
+            mBluetoothAdapter.cancelDiscovery();
+
+            try {
+                mmSocket.connect();
+
+                //pass socket
+
+            }catch (IOException connectException){
+                try {
+                    mmSocket.close();
+                }catch (IOException closeException){}
+                return;
+            }
+
+            //manageConnectedSocket(mmSocket);
+        }
+
+        public void cancel(){
+            try {
+                mmSocket.close();
+            }catch (IOException e) {}
         }
     }
 

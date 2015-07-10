@@ -22,7 +22,8 @@ import java.util.UUID;
  */
 public class BluetoothConnect extends MainActivity {
 
-    //UUID for application (probably not doing this correctly)
+    //TODO: Create static UUID
+    //UUID for application (will need a static UUID)
     private static final UUID MY_UUID = UUID.randomUUID();
 
 
@@ -32,8 +33,9 @@ public class BluetoothConnect extends MainActivity {
     private BluetoothAdapter mBluetoothAdapter;
 
 
-    /*
-    Overrides onCreate method for setting up bluetooth when class called
+    /**
+     * Overrides onCreate method for setting up bluetooth when class called
+     * @param savedInstanceState
      */
     @Override
     public void onCreate(Bundle savedInstanceState){
@@ -83,9 +85,9 @@ public class BluetoothConnect extends MainActivity {
 */
 
 
-    /*
-    Checks paired bluetooth device and then created array adapter so list can be displayed
-    TODO: Create bt_paired_list view so list can be displayed
+    /**
+     * Checks paired bluetooth device and then created array adapter so list can be displayed
+     TODO: Create bt_paired_list view so list can be displayed
      */
     public void checkPaired(){
 
@@ -105,12 +107,16 @@ public class BluetoothConnect extends MainActivity {
     //TODO: Discover devices
 
 
-    /*
-    Accept Thread Class - gets incoming connection then hands socket off to Bluetooth Control
+    /**
+     * Accept Thread Class - gets incoming connection then hands socket off to Bluetooth Control
      */
     private class AcceptThread extends Thread{
 
         private final BluetoothServerSocket mmServerSocket;
+
+        /**
+         * accept thread for incoming bt connection/socket
+         */
         public AcceptThread() {
             // Use a temporary object that is later assigned to mmServerSocket,
             // because mmServerSocket is final
@@ -121,26 +127,36 @@ public class BluetoothConnect extends MainActivity {
             } catch (IOException e) { }
             mmServerSocket = tmp;
         }
-        //TODO: Figure out how to pass the socket for use in BluetoothControl
+
+        /**
+         *
+         */
         public void run() {
             BluetoothSocket socket = null;
             // Keep listening until exception occurs or a socket is returned
             while (true) {
                 try {
                     socket = mmServerSocket.accept();
-
                 } catch (IOException e) {
+                    e.printStackTrace();
                     break;
                 }
                 //If connection was accepted
                 if (socket != null) {
-
+                    BluetoothControl.setmSocket(socket);
+                    try {
+                        mmServerSocket.close();
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
                     break;
                 }
             }
         }
 
-        /** Will cancel the listening socket, and cause the thread to finish */
+        /**
+         * Will cancel the listening socket, and cause the thread to finish
+         */
         public void cancel() {
             try {
                 mmServerSocket.close();
@@ -149,15 +165,16 @@ public class BluetoothConnect extends MainActivity {
 
     }
 
-    /*
-    Connect thread class -
+    /**
+     *
      */
     private class ConnectThread extends Thread {
         private final BluetoothSocket mmSocket;
         private final BluetoothDevice mmDevice;
 
-        /*
-        Constructor - store UUID in tmp socket
+        /**
+         * Constructor - store UUID in tmp socket
+         * @param device
          */
         public ConnectThread(BluetoothDevice device){
 
@@ -175,8 +192,8 @@ public class BluetoothConnect extends MainActivity {
             mmSocket = tmp;
         }
 
-        /*
-        ConnectThread run, will try to connect through socket
+        /**
+         * ConnectThread run, will try to connect through socket
          */
         public void run(){
 
@@ -198,11 +215,11 @@ public class BluetoothConnect extends MainActivity {
                 return;
             }
             // Do work to manage the connection (in a separate thread)
-            //manageConnectedSocket(mmSocket);
+            BluetoothControl.setmSocket(mmSocket);
         }
 
-        /*
-        will cancel an in progress connection and close socket
+        /**
+         *  will cancel an in progress connection and close socket
          */
         public void cancel(){
             try {

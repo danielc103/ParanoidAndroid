@@ -76,16 +76,14 @@ public class TicTacToeGame {
             currentPlayer = Player.X;
     }
 
-    public boolean makeMove (Player p, CellPosition c) {
-        TicTacToeCell cell = gameBoard[c.index / 3][c.index % 3];
-        Log.d("myTag", "game logic - player " + p +
-                " making move to (" + (c.index / 3) + "," + (c.index % 3) + ")");
+    public boolean makeMove (Player p, TicTacToeCell c) {
+        //Log.d("myTag", "game logic - player " + p +
+               // " making move to (" + (c.index / 3) + "," + (c.index % 3) + ")");
 
-        if (cell.getOwner() == Player.NEITHER) {
-            cell.setOwner(p);
+        if (c.getOwner() == Player.NEITHER) {
+            c.setOwner(p);
             return true;
         } else {
-            //log error?
             Log.e("myTag", "cell " + c.toString() + " already owned");
             return false;
         }
@@ -151,7 +149,8 @@ public class TicTacToeGame {
     }
 
     //find the best move for the given player
-    public CellPosition findBestMove (Player p) {
+    //TODO - replace with proper AI logic
+    public TicTacToeCell findBestMove (Player p) {
 
         //randomly pick cells until an unoccupied cell is found
         int randRow, randCol;
@@ -162,6 +161,6 @@ public class TicTacToeGame {
         } while(gameBoard[randRow][randCol].getOwner() != Player.NEITHER);
         Log.d("myTag", "Moving to (" + randRow + "," + randCol + ")");
 
-        return gameBoard[randRow][randCol].getPos();
+        return gameBoard[randRow][randCol];
     }
 }

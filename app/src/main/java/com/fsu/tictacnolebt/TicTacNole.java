@@ -112,7 +112,9 @@ public class TicTacNole extends Activity {
 
         //make move in game's logic
         //the non-UI code from here down should probably be refactored into a separate method
-        game.makeMove(game.getCurrentPlayer(), movePos);
+
+        //TODO - need to wire up Buttons to the game's TicTacToeCells somehow
+        //game.makeMove(game.getCurrentPlayer(), movePos);
 
 
         if (activePlayer.getTeam() == TicTacToeGame.Player.X)
@@ -139,13 +141,16 @@ public class TicTacNole extends Activity {
                 //this code should probably be refactored into its own method (see above note)
                 Log.d("myTag", "Starting computer turn - " + activePlayer.getTeam());
 
-                TicTacToeGame.CellPosition compMove = game.findBestMove(activePlayer.getTeam());
+                //TODO - get compMove as a TicTacToeCell, then find the appropriate button somehow
+                //TicTacToeGame.CellPosition compMove = game.findBestMove(activePlayer.getTeam());
+                /*
                 int compMoveRow = compMove.getIndex() / 3;
                 int compMoveCol = compMove.getIndex() % 3;
                 b = boardButtons[compMoveRow][compMoveCol];
+                */
 
-                //
-                game.makeMove(game.getCurrentPlayer(), compMove);
+                //TODO - get compMove as a TicTacToeCell, then find the appropriate button somehow
+                //game.makeMove(game.getCurrentPlayer(), compMove);
                 if (activePlayer.getTeam() == TicTacToeGame.Player.X)
                     b.setText(R.string.x_cell);
                 else if (activePlayer.getTeam() == TicTacToeGame.Player.O)

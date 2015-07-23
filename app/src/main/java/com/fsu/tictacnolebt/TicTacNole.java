@@ -70,7 +70,7 @@ public class TicTacNole extends Activity {
                 boardButtons[i][j].setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        makeMove((Button)v);
+                        makeMove(v);
                     }
                 });
             }
@@ -81,13 +81,12 @@ public class TicTacNole extends Activity {
 
     }
 
-    private void makeMove(Button b) {
+    private void makeMove(View b) {
         Log.d("myTag", "Making move - " + activePlayer.getTeam());
 
         TicTacToeGame.CellPosition movePos;
 
-        switch (b.getId()) {
-
+        switch (b.getId()){
             case R.id.game_top_left:
                 movePos = TicTacToeGame.CellPosition.TOP_LEFT;
                 break;
@@ -123,6 +122,13 @@ public class TicTacNole extends Activity {
         //TODO - this should be ready for deletion, but test that switch statement works first [DS]
         /*
         if (b == findViewById(R.id.game_top_left))
+=======
+                Log.e("myTag", "Erroneous button press caputred");
+                break;
+        }
+
+        /*if (b == findViewById(R.id.game_top_left))
+>>>>>>> Stashed changes
             movePos = TicTacToeGame.CellPosition.TOP_LEFT;
         else if (b == findViewById(R.id.game_top_center))
             movePos = TicTacToeGame.CellPosition.TOP_CENTER;
@@ -144,8 +150,8 @@ public class TicTacNole extends Activity {
             Log.e("myTag", "Erroneous button press captured");
             return;
         }
+<<<<<<< Updated upstream
         */
-
 
         //make move in game's logic
         //the non-UI code from here down should probably be refactored into a separate method
@@ -154,6 +160,7 @@ public class TicTacNole extends Activity {
         game.makeMove(game.getCurrentPlayer(), movePos);
 
 
+        //TODO - create a markButton method 
         if (activePlayer.getTeam() == TicTacToeGame.Player.X)
             b.setText(R.string.x_cell);
         else if (activePlayer.getTeam() == TicTacToeGame.Player.O)

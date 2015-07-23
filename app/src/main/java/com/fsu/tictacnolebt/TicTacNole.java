@@ -86,6 +86,42 @@ public class TicTacNole extends Activity {
 
         TicTacToeGame.CellPosition movePos;
 
+        switch (b.getId()) {
+
+            case R.id.game_top_left:
+                movePos = TicTacToeGame.CellPosition.TOP_LEFT;
+                break;
+            case R.id.game_top_center:
+                movePos = TicTacToeGame.CellPosition.TOP_CENTER;
+                break;
+            case R.id.game_top_right:
+                movePos = TicTacToeGame.CellPosition.TOP_RIGHT;
+                break;
+            case R.id.game_mid_left:
+                movePos = TicTacToeGame.CellPosition.MID_LEFT;
+                break;
+            case R.id.game_mid_center:
+                movePos = TicTacToeGame.CellPosition.MID_CENTER;
+                break;
+            case R.id.game_mid_right:
+                movePos = TicTacToeGame.CellPosition.MID_RIGHT;
+                break;
+            case R.id.game_bot_left:
+                movePos = TicTacToeGame.CellPosition.BOT_LEFT;
+                break;
+            case R.id.game_bot_center:
+                movePos = TicTacToeGame.CellPosition.BOT_CENTER;
+                break;
+            case R.id.game_bot_right:
+                movePos = TicTacToeGame.CellPosition.BOT_RIGHT;
+                break;
+            default:
+                Log.e("myTag", "Erroneous button press captured");
+                return;
+        }
+
+        //TODO - this should be ready for deletion, but test that switch statement works first [DS]
+        /*
         if (b == findViewById(R.id.game_top_left))
             movePos = TicTacToeGame.CellPosition.TOP_LEFT;
         else if (b == findViewById(R.id.game_top_center))
@@ -108,13 +144,14 @@ public class TicTacNole extends Activity {
             Log.e("myTag", "Erroneous button press captured");
             return;
         }
+        */
 
 
         //make move in game's logic
         //the non-UI code from here down should probably be refactored into a separate method
 
         //TODO - need to wire up Buttons to the game's TicTacToeCells somehow
-        //game.makeMove(game.getCurrentPlayer(), movePos);
+        game.makeMove(game.getCurrentPlayer(), movePos);
 
 
         if (activePlayer.getTeam() == TicTacToeGame.Player.X)
@@ -141,13 +178,21 @@ public class TicTacNole extends Activity {
                 //this code should probably be refactored into its own method (see above note)
                 Log.d("myTag", "Starting computer turn - " + activePlayer.getTeam());
 
-                //TODO - get compMove as a TicTacToeCell, then find the appropriate button somehow
-                //TicTacToeGame.CellPosition compMove = game.findBestMove(activePlayer.getTeam());
+
+                //find the comp's best move, then recursively call this method with the comp's move;
+                //computer move will happen and finish, then the original call will finish
+                //should end with control being returned to human player
+                TicTacToeCell compMove = game.findBestMove(activePlayer.getTeam());
+                makeMove(compMove.getUiCell());
                 /*
                 int compMoveRow = compMove.getIndex() / 3;
                 int compMoveCol = compMove.getIndex() % 3;
                 b = boardButtons[compMoveRow][compMoveCol];
                 */
+
+                /*
+                 * This block of code should be redundant with recursive call to makeMove() above.
+                 * TODO - TEST THIS [DS]
 
                 //TODO - get compMove as a TicTacToeCell, then find the appropriate button somehow
                 //game.makeMove(game.getCurrentPlayer(), compMove);
@@ -170,6 +215,7 @@ public class TicTacNole extends Activity {
                         activePlayer = playerOne;
                     }
                 }
+                */
 
             } else {
                 //wait for human player to make a move

@@ -90,6 +90,11 @@ public class TicTacToeGame {
 
     }
 
+    public boolean makeMove (Player p, CellPosition c) {
+        TicTacToeCell cell = gameBoard[c.getIndex() / 3][c.getIndex() % 3];
+        return makeMove(p, cell);
+    }
+
     //check if a player has won, setting winningPlayer appropriately
     public void checkForWin() {
 

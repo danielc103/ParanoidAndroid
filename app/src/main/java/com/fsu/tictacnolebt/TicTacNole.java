@@ -95,39 +95,39 @@ public class TicTacNole extends Activity {
         switch (b.getId()){
             case R.id.game_top_left:
                 movePos = TicTacToeGame.CellPosition.TOP_LEFT;
-                markButton(boardButtons[1][1], "11");
+                markButton(boardButtons[0][0], "00");
                 break;
             case R.id.game_top_center:
                 movePos = TicTacToeGame.CellPosition.TOP_CENTER;
-                markButton(boardButtons[1][2], "12");
+                markButton(boardButtons[0][1], "01");
                 break;
             case R.id.game_top_right:
                 movePos = TicTacToeGame.CellPosition.TOP_RIGHT;
-                markButton(boardButtons[1][3], "13");
+                markButton(boardButtons[0][2], "02");
                 break;
             case R.id.game_mid_left:
                 movePos = TicTacToeGame.CellPosition.MID_LEFT;
-                markButton(boardButtons[2][1], "21");
+                markButton(boardButtons[1][0], "10");
                 break;
             case R.id.game_mid_center:
                 movePos = TicTacToeGame.CellPosition.MID_CENTER;
-                markButton(boardButtons[2][2], "22");
+                markButton(boardButtons[1][1], "11");
                 break;
             case R.id.game_mid_right:
                 movePos = TicTacToeGame.CellPosition.MID_RIGHT;
-                markButton(boardButtons[2][3], "23");
+                markButton(boardButtons[1][2], "12");
                 break;
             case R.id.game_bot_left:
                 movePos = TicTacToeGame.CellPosition.BOT_LEFT;
-                markButton(boardButtons[3][1], "31");
+                markButton(boardButtons[2][0], "20");
                 break;
             case R.id.game_bot_center:
                 movePos = TicTacToeGame.CellPosition.BOT_CENTER;
-                markButton(boardButtons[3][2], "32");
+                markButton(boardButtons[2][1], "21");
                 break;
             case R.id.game_bot_right:
                 movePos = TicTacToeGame.CellPosition.BOT_RIGHT;
-                markButton(boardButtons[3][3], "33");
+                markButton(boardButtons[2][2], "22");
                 break;
             default:
                 Log.e("myTag", "Erroneous button press captured");

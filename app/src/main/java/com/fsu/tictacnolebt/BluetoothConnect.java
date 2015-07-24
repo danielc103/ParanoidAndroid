@@ -22,9 +22,9 @@ import java.util.UUID;
  */
 public class BluetoothConnect extends MainActivity {
 
-    //TODO: Create static UUID
     //UUID for application (will need a static UUID)
-    private static final UUID MY_UUID = UUID.randomUUID();
+    private static final UUID MY_UUID =
+            UUID.fromString("8ce255c0-200a-11e0-ac64-0800200c9a66");
 
 
     private static final String NAME = "ParanoidAndroidBT";
@@ -87,7 +87,6 @@ public class BluetoothConnect extends MainActivity {
 
     /**
      * Checks paired bluetooth device and then created array adapter so list can be displayed
-     TODO: Create bt_paired_list view so list can be displayed
      */
     public void checkPaired(){
 

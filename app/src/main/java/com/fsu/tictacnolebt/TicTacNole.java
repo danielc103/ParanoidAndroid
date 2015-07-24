@@ -37,6 +37,12 @@ public class TicTacNole extends Activity {
     TicTacToePlayer playerTwo;
     TicTacToePlayer activePlayer;
 
+    //Bluetooth game logic
+    boolean btPlay = false;
+    BluetoothControl btControl;
+    //Recieved thread boolean statement
+    boolean running = false;
+
     //UI elements
     TableLayout board;
     Button[][] boardButtons;
@@ -89,30 +95,39 @@ public class TicTacNole extends Activity {
         switch (b.getId()){
             case R.id.game_top_left:
                 movePos = TicTacToeGame.CellPosition.TOP_LEFT;
+                markButton(boardButtons[1][1], "11");
                 break;
             case R.id.game_top_center:
                 movePos = TicTacToeGame.CellPosition.TOP_CENTER;
+                markButton(boardButtons[1][2], "12");
                 break;
             case R.id.game_top_right:
                 movePos = TicTacToeGame.CellPosition.TOP_RIGHT;
+                markButton(boardButtons[1][3], "13");
                 break;
             case R.id.game_mid_left:
                 movePos = TicTacToeGame.CellPosition.MID_LEFT;
+                markButton(boardButtons[2][1], "21");
                 break;
             case R.id.game_mid_center:
                 movePos = TicTacToeGame.CellPosition.MID_CENTER;
+                markButton(boardButtons[2][2], "22");
                 break;
             case R.id.game_mid_right:
                 movePos = TicTacToeGame.CellPosition.MID_RIGHT;
+                markButton(boardButtons[2][3], "23");
                 break;
             case R.id.game_bot_left:
                 movePos = TicTacToeGame.CellPosition.BOT_LEFT;
+                markButton(boardButtons[3][1], "31");
                 break;
             case R.id.game_bot_center:
                 movePos = TicTacToeGame.CellPosition.BOT_CENTER;
+                markButton(boardButtons[3][2], "32");
                 break;
             case R.id.game_bot_right:
                 movePos = TicTacToeGame.CellPosition.BOT_RIGHT;
+                markButton(boardButtons[3][3], "33");
                 break;
             default:
                 Log.e("myTag", "Erroneous button press captured");
@@ -160,13 +175,13 @@ public class TicTacNole extends Activity {
         game.makeMove(game.getCurrentPlayer(), movePos);
 
 
-        //TODO - create a markButton method 
+       /* //TODO - create a markButton method
         if (activePlayer.getTeam() == TicTacToeGame.Player.X)
             b.setText(R.string.x_cell);
         else if (activePlayer.getTeam() == TicTacToeGame.Player.O)
             b.setText(R.string.o_cell);
 
-        b.setClickable(false);
+        b.setClickable(false);*/
 
         game.checkForWin();
 
@@ -309,6 +324,74 @@ public class TicTacNole extends Activity {
             Log.e("myTag", "Error: handleVictory() called with no winning player");
         }
     }
+    //////////////////////////////////////////////////////////////////////////
+    //ADDED GAME SUPPORT LOGIC FOR BLUETOOTH - Daniel Carroll
+    /////////////////////////////////////////////////////////////////////////
 
+    /**
+     * Marks the button with an X or an O and sends move if connected to bluetooth
+     * @param btn
+     */
+    public void markButton(Button btn, String buttonNumber){
+
+        //bt mark
+        if (btPlay){
+            if (activePlayer.getTeam() == TicTacToeGame.Player.X) {
+                btn.setText(R.string.x_cell);
+                btControl.sendMove("X" + buttonNumber);
+            }
+            else if (activePlayer.getTeam() == TicTacToeGame.Player.O) {
+                btn.setText(R.string.o_cell);
+                btControl.sendMove("O" + buttonNumber);
+            }
+
+            btn.setClickable(false);
+
+
+        }
+        //non bt mark
+        else {
+            if (activePlayer.getTeam() == TicTacToeGame.Player.X)
+                btn.setText(R.string.x_cell);
+            else if (activePlayer.getTeam() == TicTacToeGame.Player.O)
+                btn.setText(R.string.o_cell);
+
+            btn.setClickable(false);
+        }
+    }
+
+
+    /**
+     * thread to actively get move. Splits the move into 2 part array.  1st part = mark / 2nd part =  button number
+     * then passes new array to receivedMove method for part handling
+     */
+    public void receivedThread(){
+        running =  true;
+
+        (new Thread() {
+
+            public void run() {
+
+                while (true) {
+                    if(running){
+                        String[] rMove = new String[1];
+                        rMove = btControl.receiveMove().split(",", 2);
+                        receivedMove(rMove);
+                    }
+                    else break;
+                }
+            }
+        }).start();
+    }
+
+    /**
+     * receives move string array from thread, then can mark oppenents board and lock button
+     * @param move
+     */
+    public void receivedMove(String[] move){
+        //TODO: mark correct board move and lock button
+    }
+
+    //TODO: create method to end received thread - can't run forever!
 
 }

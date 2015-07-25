@@ -103,7 +103,6 @@ public class BluetoothConnect extends MainActivity {
         mAlertDialog.setNegativeButton("Find Player", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which){
-                //TODO: class or method to find BT device and connect
             }
         });
 

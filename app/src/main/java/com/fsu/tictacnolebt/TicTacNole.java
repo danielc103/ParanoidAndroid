@@ -338,11 +338,11 @@ public class TicTacNole extends Activity {
         if (btPlay){
             if (activePlayer.getTeam() == TicTacToeGame.Player.X) {
                 btn.setText(R.string.x_cell);
-                btControl.sendMove("X" + buttonNumber);
+                btControl.sendMove("X," + buttonNumber);
             }
             else if (activePlayer.getTeam() == TicTacToeGame.Player.O) {
-                btn.setText(R.string.o_cell);
-                btControl.sendMove("O" + buttonNumber);
+                btn.setText("O");
+                btControl.sendMove("O," + buttonNumber);
             }
 
             btn.setClickable(false);
@@ -385,11 +385,53 @@ public class TicTacNole extends Activity {
     }
 
     /**
-     * receives move string array from thread, then can mark oppenents board and lock button
+     * receives move string array from thread, then marks opponents board and lock button
      * @param move
      */
     public void receivedMove(String[] move){
-        //TODO: mark correct board move and lock button
+
+        String mark = move[0];
+
+
+        if(move[1].contains("00")){
+            boardButtons[0][0].setText(mark);
+            boardButtons[0][0].setClickable(false);
+        }
+        if(move[1].contains("01")){
+            boardButtons[0][1].setText(mark);
+            boardButtons[0][1].setClickable(false);
+        }
+        if(move[1].contains("02")){
+            boardButtons[0][2].setText(mark);
+            boardButtons[0][2].setClickable(false);
+        }
+        if(move[1].contains("10")){
+            boardButtons[1][0].setText(mark);
+            boardButtons[1][0].setClickable(false);
+        }
+        if(move[1].contains("11")){
+            boardButtons[1][1].setText(mark);
+            boardButtons[1][1].setClickable(false);
+        }
+        if(move[1].contains("12")){
+            boardButtons[1][2].setText(mark);
+            boardButtons[1][2].setClickable(false);
+        }
+        if(move[1].contains("20")){
+            boardButtons[2][0].setText(mark);
+            boardButtons[2][0].setClickable(false);
+        }
+        if(move[1].contains("21")){
+            boardButtons[2][1].setText(mark);
+            boardButtons[2][1].setClickable(false);
+        }
+        if(move[1].contains("22")){
+            boardButtons[2][2].setText(mark);
+            boardButtons[2][2].setClickable(false);
+        }
+
+
+
     }
 
     //TODO: create method to end received thread - can't run forever!

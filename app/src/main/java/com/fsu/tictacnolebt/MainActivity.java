@@ -8,8 +8,6 @@ import android.widget.Button;
 
 public class MainActivity extends ActionBarActivity {
 
-    Button mTestFragmentButton;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -22,20 +20,6 @@ public class MainActivity extends ActionBarActivity {
         getSupportFragmentManager().beginTransaction().add(R.id.fragment_container,
                 gameSelectFragment).commit();
 
-        /*
-        // Add a click listener to the 'Hello World'-style button that tests the use
-        //   of fragments.
-        // SOURCE: http://developer.android.com/training/basics/fragments/fragment-ui.html
-        mTestFragmentButton = (Button)findViewById(R.id.test_fragment_button);
-        mTestFragmentButton.setOnClickListener(new Button.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                GameSelectFragment gameSelectFragment = new GameSelectFragment();
-                getSupportFragmentManager().beginTransaction().add(R.id.fragment_container,
-                        gameSelectFragment).commit();
-            }
-        });
-        */
     }
 
     @Override

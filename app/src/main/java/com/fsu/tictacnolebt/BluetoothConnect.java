@@ -10,12 +10,14 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.graphics.Paint;
 import android.location.SettingInjectorService;
 import android.os.Bundle;
 import android.os.Debug;
 import android.support.v4.app.FragmentTransaction;
 import android.view.View;
 import android.widget.ArrayAdapter;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -126,8 +128,7 @@ public class BluetoothConnect extends MainActivity {
         }
     }
 
-    //TODO: Discover devices
-
+    // Event listener for devices discovered.
     // [SOURCE] http://developer.android.com/guide/topics/connectivity/bluetooth.html
     private final BroadcastReceiver mReceiver = new BroadcastReceiver() {
         public void onReceive(Context context, Intent intent) {
@@ -141,9 +142,15 @@ public class BluetoothConnect extends MainActivity {
                 BluetoothDevice device = intent.getParcelableExtra(BluetoothDevice.EXTRA_DEVICE);
                 mScannedDevices.add(device);
 
+                // TODO: Communicate with the device found to make sure it is hosting TicTacNole.
+
                 // Create a view for it to be clicked on.
                 TextView deviceEntry = new TextView(BluetoothConnect.this);
-                deviceEntry.setText(device.getName());
+                String deviceName = new String(device.getAddress());
+                if (device.getName() != null)
+                    deviceName += " (" + device.getName() + ")";
+                deviceEntry.setText(deviceName);
+                deviceEntry.setTextSize(20);   // hard-coded for now, can change later
 
                 // Set the click listener of the event.
                 deviceEntry.setOnClickListener(new TextView.OnClickListener() {
@@ -151,25 +158,26 @@ public class BluetoothConnect extends MainActivity {
                     public void onClick(View v) {
 
                         // TODO: Attempt connection with device using connectThread.
+                        Toast.makeText(BluetoothConnect.this, "TODO: Connect with device and begin game", Toast.LENGTH_SHORT).show();
                         mBluetoothAdapter.cancelDiscovery();
                     }
-
                 });
 
                 // Show it on the list.
-                ListView scannedDevices = (ListView)findViewById(R.id.bt_scanned_list);
+                LinearLayout scannedDevices = (LinearLayout)findViewById(R.id.bt_scanned_list);
                 scannedDevices.addView(deviceEntry);
             }
         }
     };
 
+    // Scan for nearby Bluetooth devices.
     public void scanForDevices() {
 
         // Switch to a scanned device fragment.
         // SOURCE: http://developer.android.com/training/basics/fragments/fragment-ui.html
         DeviceScanFragment deviceScanFragment = new DeviceScanFragment();
         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
-        transaction.replace(R.id.fragment_container, deviceScanFragment).commit();
+        transaction.replace(R.id.fragment_container, deviceScanFragment);
         transaction.addToBackStack(null);   // so user can press 'back'
         transaction.commit();
 
@@ -177,10 +185,8 @@ public class BluetoothConnect extends MainActivity {
         IntentFilter filter = new IntentFilter(BluetoothDevice.ACTION_FOUND);
         registerReceiver(mReceiver, filter);
 
+        // Begin the device scan.
         mBluetoothAdapter.startDiscovery();
-
-        // TODO: Call 'cancelDiscovery()' when connected.
-
     }
 
     /**

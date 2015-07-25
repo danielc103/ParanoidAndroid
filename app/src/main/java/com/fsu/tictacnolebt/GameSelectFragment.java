@@ -56,29 +56,24 @@ public class GameSelectFragment extends Fragment implements View.OnClickListener
             mSpinnerDialog.setTitle("Waiting for players...");
             mSpinnerDialog.show();
 
-            /*
-            // TODO: Bluetooth listen-for-client implementation.
-            Toast.makeText(getActivity(), "TODO: Implement Bluetooth Listen-For-Client",
-                    Toast.LENGTH_SHORT).show();
-            */
-
-            // Use AcceptThread here
+            // Begin accepting requests from clients.
             // [SOURCE] http://stackoverflow.com/questions/9212574/calling-activity-methods-from-fragment
             btConnActivity.startAcceptThread();
 
             // TODO: Utilize socket obtained in acceptThread.
+            Toast.makeText(getActivity(), "TODO: Utilize socket obtained in acceptThread", Toast.LENGTH_SHORT).show();
 
         }
         else if (v == mBtnPlayAsClient) {
-            /*
-            // TODO: Bluetooth scan-for-servers implementation.
-            Toast.makeText(getActivity(), "TODO: Implement Bluetooth Scan",
-                    Toast.LENGTH_SHORT).show();
-            */
+
+            // Look for nearby Bluetooth devices hosting Tic Tac Nole.
             btConnActivity.scanForDevices();
+
+            // TODO: Initiate a game of Tic Tac Nole with accepting host.
 
         }
         else {
+
             // TODO: Single phone Tic-Tac-Nole goes here.
             Toast.makeText(getActivity(), "TODO: Implement Single Phone Tic-Tac-Nole",
                     Toast.LENGTH_SHORT).show();

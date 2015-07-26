@@ -341,7 +341,7 @@ public class TicTacNole extends Activity {
                 btControl.sendMove("X," + buttonNumber);
             }
             else if (activePlayer.getTeam() == TicTacToeGame.Player.O) {
-                btn.setText("O");
+                btn.setText(R.string.o_cell);
                 btControl.sendMove("O," + buttonNumber);
             }
 

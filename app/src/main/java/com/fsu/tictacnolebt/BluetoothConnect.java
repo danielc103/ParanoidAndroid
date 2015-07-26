@@ -74,7 +74,7 @@ public class BluetoothConnect extends MainActivity {
         }
 
         //if present check to see if bluetooth turned on
-        if(mBluetoothAdapter.isEnabled()){
+        if(!mBluetoothAdapter.isEnabled()){
             Intent enableBtIntent = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
             startActivityForResult(enableBtIntent, REQUEST_ENABLE_BT);
         }

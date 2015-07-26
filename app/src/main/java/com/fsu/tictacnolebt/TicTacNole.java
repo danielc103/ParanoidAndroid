@@ -66,6 +66,9 @@ public class TicTacNole extends Activity {
         Intent intent = getIntent();
         role = intent.getStringExtra(GameSelectFragment.EXTRA_KEY + ".role");
         numHumans = intent.getIntExtra(GameSelectFragment.EXTRA_KEY + ".numHumans", 1);
+        if (numHumans > 1) {
+            btPlay = true;
+        }
 
         //initialize UI elements
         board = (TableLayout)findViewById(R.id.game_board);

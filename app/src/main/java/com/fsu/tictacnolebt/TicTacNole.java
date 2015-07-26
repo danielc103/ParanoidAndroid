@@ -73,6 +73,11 @@ public class TicTacNole extends Activity {
         replayButton = (Button)findViewById(R.id.replay_button);
         turnSignifier = (TextView)findViewById(R.id.turn_signifier);
 
+        // Initialize the BluetoothControl object for use to communicate with the other player.
+        // TODO: Put a breakpoint here and try to test this with two phones. Make sure 'mSocket' is still there, etc.
+        btControl = new BluetoothControl();
+        btControl.setupBT();
+
         //wire up click listener for replay_button
         replayButton.setOnClickListener(new View.OnClickListener() {
             @Override

@@ -24,7 +24,9 @@ public class BluetoothControl {
     /**
      * sets up bluetooth controls/ sets buffer reader, output stream, and print writer
      */
-    private void setupBT(){
+    // Made public by Scott (7/26/2015)
+    //private void setupBT(){
+    public void setupBT() {
         try {
 
             bufferedReader = new BufferedReader(new InputStreamReader(mSocket.getInputStream()));

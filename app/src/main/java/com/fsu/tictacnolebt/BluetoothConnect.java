@@ -24,6 +24,7 @@ import android.widget.Toast;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Set;
 import java.util.UUID;
 
@@ -48,6 +49,8 @@ public class BluetoothConnect extends MainActivity {
     public AcceptThread getAcceptThread() { return mAcceptThread; }
     public ConnectThread getConnectThread() { return mConnectThread; }
 
+    public final static String EXTRA_KEY = "com.fsu.tictacnolebt";
+
     public void startAcceptThread() {
 
         mAcceptThread = new AcceptThread();
@@ -55,13 +58,14 @@ public class BluetoothConnect extends MainActivity {
     }
     public void startConnectThread(BluetoothDevice device) {
 
-
         mConnectThread = new ConnectThread(device);
         mConnectThread.start();
     }
 
     // An array to hold the devices found by Bluetooth scan.
-    private ArrayList<BluetoothDevice> mScannedDevices = new ArrayList<BluetoothDevice>();
+    // NOTE: Changed to HashMap (7/26/2015).
+    //private ArrayList<BluetoothDevice> mScannedDevices = new ArrayList<BluetoothDevice>();
+    private HashMap<TextView, BluetoothDevice> mScannedDevices = new HashMap<TextView, BluetoothDevice>();
 
     /**
      * Overrides onCreate method for setting up bluetooth when class called
@@ -145,7 +149,7 @@ public class BluetoothConnect extends MainActivity {
 
                 // Get the bluetooth device.
                 BluetoothDevice device = intent.getParcelableExtra(BluetoothDevice.EXTRA_DEVICE);
-                mScannedDevices.add(device);
+                //mScannedDevices.add(device);
 
                 // TODO: Communicate with the device found to make sure it is hosting TicTacNole.
 
@@ -163,10 +167,16 @@ public class BluetoothConnect extends MainActivity {
                     public void onClick(View v) {
 
                         // TODO: Attempt connection with device using connectThread.
-                        Toast.makeText(BluetoothConnect.this, "TODO: Connect with device and begin game", Toast.LENGTH_SHORT).show();
-                        mBluetoothAdapter.cancelDiscovery();
+                        //Toast.makeText(BluetoothConnect.this, "TODO: Connect with device and begin game", Toast.LENGTH_SHORT).show();
+                        //Toast.makeText(BluetoothConnect.this, mScannedDevices.get(v).getAddress(), Toast.LENGTH_SHORT).show();
+                        //mBluetoothAdapter.cancelDiscovery();
+                        startConnectThread(mScannedDevices.get(v));
+
                     }
                 });
+
+                // Put the TextView as the key and the BluetoothDevice as the object in a HashMap.
+                mScannedDevices.put(deviceEntry, device);
 
                 // Show it on the list.
                 LinearLayout scannedDevices = (LinearLayout)findViewById(R.id.bt_scanned_list);
@@ -239,6 +249,14 @@ public class BluetoothConnect extends MainActivity {
                     break;
                 }
             }
+
+            // If connection was successful, start the Tic Tac Nole activity as a 'Host'.
+            if (socket != null) {
+                Intent intent = new Intent(BluetoothConnect.this, TicTacNole.class);
+                intent.putExtra(EXTRA_KEY + ".numHumans", 2);
+                intent.putExtra(EXTRA_KEY + ".role", "host");
+                startActivity(intent);
+            }
         }
 
         /**
@@ -303,6 +321,13 @@ public class BluetoothConnect extends MainActivity {
             }
             // Do work to manage the connection (in a separate thread)
             BluetoothControl.setmSocket(mmSocket);
+
+            // After connecting, start the Tic Tac Nole activity as a 'Client'.
+            Intent intent = new Intent(BluetoothConnect.this, TicTacNole.class);
+            intent.putExtra(EXTRA_KEY + ".numHumans", 2);
+            intent.putExtra(EXTRA_KEY + ".role", "client");
+            startActivity(intent);
+
         }
 
         /**

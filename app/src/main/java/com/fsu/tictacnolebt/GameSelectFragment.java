@@ -74,6 +74,7 @@ public class GameSelectFragment extends Fragment implements View.OnClickListener
             // TODO: Utilize socket obtained in acceptThread.
             Toast.makeText(getActivity(), "TODO: Utilize socket obtained in acceptThread", Toast.LENGTH_SHORT).show();
 
+            //Initiate a game of Tic Tac Nole with accepting client
             Intent intent = new Intent(getActivity(), TicTacNole.class);
             intent.putExtra(EXTRA_KEY + ".numHumans", 2);
             intent.putExtra(EXTRA_KEY +".role", "host");
@@ -85,7 +86,9 @@ public class GameSelectFragment extends Fragment implements View.OnClickListener
             // Look for nearby Bluetooth devices hosting Tic Tac Nole.
             btConnActivity.scanForDevices();
 
-            // TODO: Initiate a game of Tic Tac Nole with accepting host.
+            //TODO - need to wait at this point
+
+            //Initiate a game of Tic Tac Nole with accepting host.
             Intent intent = new Intent(getActivity(), TicTacNole.class);
             intent.putExtra(EXTRA_KEY + ".numHumans", 2);
             intent.putExtra(EXTRA_KEY + ".role", "client");

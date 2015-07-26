@@ -2,6 +2,8 @@ package com.fsu.tictacnolebt;
 
 import android.app.Activity;
 import android.app.ProgressDialog;
+import android.bluetooth.BluetoothAdapter;
+import android.content.Intent;
 import android.support.v4.app.Fragment;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -22,6 +24,7 @@ public class GameSelectFragment extends Fragment implements View.OnClickListener
     Button mBtnPlayAsClient;
     Button mBtnPlayWithoutBt;
     ProgressDialog mSpinnerDialog;
+    private BluetoothAdapter mBluetoothAdapter;
 
     @Override
     public View onCreateView (LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {

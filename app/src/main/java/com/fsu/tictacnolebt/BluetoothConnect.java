@@ -47,11 +47,15 @@ public class BluetoothConnect extends MainActivity {
     private ConnectThread mConnectThread;
     public AcceptThread getAcceptThread() { return mAcceptThread; }
     public ConnectThread getConnectThread() { return mConnectThread; }
+
     public void startAcceptThread() {
+
         mAcceptThread = new AcceptThread();
         mAcceptThread.start();
     }
     public void startConnectThread(BluetoothDevice device) {
+
+
         mConnectThread = new ConnectThread(device);
         mConnectThread.start();
     }
@@ -74,7 +78,7 @@ public class BluetoothConnect extends MainActivity {
         }
 
         //if present check to see if bluetooth turned on
-        if(mBluetoothAdapter.isEnabled()){
+        if(!mBluetoothAdapter.isEnabled()){
             Intent enableBtIntent = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
             startActivityForResult(enableBtIntent, REQUEST_ENABLE_BT);
         }

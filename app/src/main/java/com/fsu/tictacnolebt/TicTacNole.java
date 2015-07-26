@@ -17,6 +17,7 @@
 package com.fsu.tictacnolebt;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
@@ -35,6 +36,10 @@ public class TicTacNole extends Activity {
     TicTacToePlayer playerOne;
     TicTacToePlayer playerTwo;
     TicTacToePlayer activePlayer;
+
+    //game parameters
+    String role;
+    int numHumans;
 
     //Bluetooth game logic
     boolean btPlay = false;
@@ -56,6 +61,11 @@ public class TicTacNole extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_tic_tac_nole);
+
+        //get game parameters from the Intent creating this object
+        Intent intent = getIntent();
+        role = intent.getStringExtra(GameSelectFragment.EXTRA_KEY + ".role");
+        numHumans = intent.getIntExtra(GameSelectFragment.EXTRA_KEY + ".numHumans", 1);
 
         //initialize UI elements
         board = (TableLayout)findViewById(R.id.game_board);
@@ -216,16 +226,6 @@ public class TicTacNole extends Activity {
     private void newGame () {
         game = new TicTacToeGame();
 
-        /* PLAYER SETTINGS
-         *
-         */
-        //default; player 1 is human, X's
-        //player 2 is human, O's
-        playerOne = new TicTacToePlayer(TicTacToeGame.PlayerType.HUMAN, TicTacToeGame.Player.X);
-        playerTwo = new TicTacToePlayer(TicTacToeGame.PlayerType.COMPUTER, TicTacToeGame.Player.O);
-
-        //X always plays first
-        activePlayer = playerOne;
         turnSignifier.setText(R.string.x_prompt);
 
         //reset game board display
@@ -234,6 +234,34 @@ public class TicTacNole extends Activity {
                 boardButtons[i][j].setClickable(true);
                 boardButtons[i][j].setText(R.string.blank_cell);
             }
+        }
+
+        //set player settings based on parameters passed to intent
+        if (numHumans == 2) {
+            playerOne = new TicTacToePlayer(TicTacToeGame.PlayerType.HUMAN, TicTacToeGame.Player.X);
+            playerTwo = new TicTacToePlayer(TicTacToeGame.PlayerType.HUMAN, TicTacToeGame.Player.O);
+
+        } else if (numHumans == 1) {
+            playerOne = new TicTacToePlayer(TicTacToeGame.PlayerType.HUMAN, TicTacToeGame.Player.X);
+            playerTwo = new TicTacToePlayer(TicTacToeGame.PlayerType.COMPUTER, TicTacToeGame.Player.O);
+        } else {
+            Log.e(myTag, "Incorrect game parameter: numHumans");
+            //TODO - display Toast w/ error message
+            //TODO - close activity
+        }
+
+        //X always plays first
+        activePlayer = playerOne;
+
+        //assume the host is always X, playing first
+        if (role.equals("host")) {
+            receiveControl();
+        } else if (role.equals("client")) {
+            giveControl();
+        } else {
+            Log.e(myTag, "Incorrect game parameter: role");
+            //TODO - display Toast w/ error message
+            //TODO - close activity
         }
     }
 

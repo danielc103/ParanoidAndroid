@@ -16,4 +16,6 @@
     <string name="replay_prompt">Play Again</string>
     <string name="credits">Created By: Paranoid Android</string>
 
+    <string name="action_settings">Settings</string>
+
 </resources>

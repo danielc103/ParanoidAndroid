@@ -80,6 +80,9 @@ public class TicTacNole extends Activity {
                     @Override
                     public void onClick(View v) {
                         makeMove(v, true);
+                        if (btPlay) {
+                            giveControl();
+                        }
                     }
                 });
             }
@@ -316,6 +319,8 @@ public class TicTacNole extends Activity {
 
         int moveRow, moveCol;
 
+
+
         if (Character.isDigit(move[1])) {
             moveRow = Character.getNumericValue(move[1]);
         } else {
@@ -331,12 +336,46 @@ public class TicTacNole extends Activity {
         }
 
         makeMove(boardButtons[moveRow][moveCol], false);
+
+        if (btPlay) {
+            receiveControl();
+        }
     }
 
     @Override
     protected void onDestroy () {
         running = false; //stop moveReceiver thread
         super.onDestroy();
+    }
+
+    //give control to the other player, wait for input from them
+    private void giveControl() {
+
+        turnSignifier.setText(turnSignifier.getText() + "; Waiting for other player");
+
+        for (int i = 0; i < 3; ++i) {
+            for (int j = 0; j < 3; ++j) {
+                boardButtons[i][j].setClickable(false);
+            }
+        }
+
+    }
+
+    //receive control from other player
+    private void receiveControl() {
+
+        turnSignifier.setText(turnSignifier.getText() + "; Your turn!");
+
+        for (int i = 0; i < 3; ++i) {
+            for (int j = 0; j < 3; ++j) {
+                if (boardButtons[i][j].getText().equals("")) {
+                    boardButtons[i][j].setClickable(true);
+                }
+
+
+            }
+        }
+
     }
 
 }

@@ -41,6 +41,7 @@ public class TicTacNole extends Activity {
     BluetoothControl btControl;
     //Recieved thread boolean statement
     boolean running = false;
+    Thread moveReceiver; //receives moves from other device over BT
 
     //UI elements
     TableLayout board;
@@ -370,11 +371,11 @@ public class TicTacNole extends Activity {
     public void receivedThread(){
         running =  true;
 
-        (new Thread() {
+        moveReceiver = new Thread() {
 
             public void run() {
 
-                while (true) {
+                while (running) {
                     if(running){
                         char[] rMove;
                         rMove = btControl.receiveMove().toCharArray();
@@ -383,7 +384,8 @@ public class TicTacNole extends Activity {
                     else break;
                 }
             }
-        }).start();
+        };
+        moveReceiver.start();
     }
 
     /**
@@ -391,7 +393,6 @@ public class TicTacNole extends Activity {
      * @param move
      */
     public void receivedMove(char[] move){
-        //TODO: mark correct board move and lock button
 
         int moveRow, moveCol;
 
@@ -412,6 +413,10 @@ public class TicTacNole extends Activity {
         makeMove(boardButtons[moveRow][moveCol]);
     }
 
-    //TODO: create method to end received thread - can't run forever!
+    @Override
+    protected void onDestroy () {
+        running = false; //stop moveReceiver thread
+        super.onDestroy();
+    }
 
 }

@@ -208,12 +208,11 @@ public class TicTacNole extends Activity {
                 //computer move will happen and finish, then the original call will finish
                 //should end with control being returned to human player
                 TicTacToeCell compMove = game.findBestMove(activePlayer.getTeam());
-                makeMove(compMove.getUiCell());
-                /*
-                int compMoveRow = compMove.getIndex() / 3;
-                int compMoveCol = compMove.getIndex() % 3;
-                b = boardButtons[compMoveRow][compMoveCol];
-                */
+
+
+                int compMoveRow = compMove.getPos().getIndex() / 3;
+                int compMoveCol = compMove.getPos().getIndex() % 3;
+                makeMove(boardButtons[compMoveRow][compMoveCol]);
 
                 /*
                  * This block of code should be redundant with recursive call to makeMove() above.
@@ -244,14 +243,16 @@ public class TicTacNole extends Activity {
 
             } else {
                 //wait for human player to make a move
-                Log.d(myTag, "Waiting for human turn" + activePlayer.getTeam());
+                Log.d(myTag, "Waiting for human turn " + activePlayer.getTeam());
             }
 
             //set turn_signifier appropriately
-            if (activePlayer.getTeam() == TicTacToeGame.Player.X) {
-                turnSignifier.setText(R.string.x_prompt);
-            } else {
-                turnSignifier.setText(R.string.o_prompt);
+            if (game.getWinningPlayer() == TicTacToeGame.Player.NEITHER) {
+                if (activePlayer.getTeam() == TicTacToeGame.Player.X) {
+                    turnSignifier.setText(R.string.x_prompt);
+                } else {
+                    turnSignifier.setText(R.string.o_prompt);
+                }
             }
 
         }

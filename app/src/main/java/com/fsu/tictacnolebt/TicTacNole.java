@@ -30,7 +30,6 @@ import android.widget.TextView;
 //this class implements the UI for the Tic Tac Toe game and handles the main game loop
 public class TicTacNole extends Activity {
 
-
     //game logic
     TicTacToeGame game;
     TicTacToePlayer playerOne;
@@ -42,12 +41,16 @@ public class TicTacNole extends Activity {
     BluetoothControl btControl;
     //Recieved thread boolean statement
     boolean running = false;
+    Thread moveReceiver; //receives moves from other device over BT
 
     //UI elements
     TableLayout board;
     Button[][] boardButtons;
     Button replayButton;
     TextView turnSignifier;
+
+    //debugging
+    String myTag = "TTN";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -88,7 +91,7 @@ public class TicTacNole extends Activity {
     }
 
     private void makeMove(View b) {
-        Log.d("myTag", "Making move - " + activePlayer.getTeam());
+        Log.d(myTag, "Making move - " + activePlayer.getTeam());
 
         TicTacToeGame.CellPosition movePos;
 
@@ -138,7 +141,7 @@ public class TicTacNole extends Activity {
         /*
         if (b == findViewById(R.id.game_top_left))
 =======
-                Log.e("myTag", "Erroneous button press caputred");
+                Log.e(myTag, "Erroneous button press caputred");
                 break;
         }
 
@@ -198,7 +201,7 @@ public class TicTacNole extends Activity {
                 //handle computer turn
 
                 //this code should probably be refactored into its own method (see above note)
-                Log.d("myTag", "Starting computer turn - " + activePlayer.getTeam());
+                Log.d(myTag, "Starting computer turn - " + activePlayer.getTeam());
 
 
                 //find the comp's best move, then recursively call this method with the comp's move;
@@ -241,7 +244,7 @@ public class TicTacNole extends Activity {
 
             } else {
                 //wait for human player to make a move
-                Log.d("myTag", "Waiting for human turn" + activePlayer.getTeam());
+                Log.d(myTag, "Waiting for human turn" + activePlayer.getTeam());
             }
 
             //set turn_signifier appropriately
@@ -304,7 +307,7 @@ public class TicTacNole extends Activity {
 
     private void handleVictory(TicTacToeGame.Player winningPlayer) {
 
-        Log.d("myTag", "Victory found for player " + winningPlayer);
+        Log.d(myTag, "Victory found for player " + winningPlayer);
 
         //lock all buttons
         for (int i = 0; i < 3; ++i) {
@@ -321,7 +324,7 @@ public class TicTacNole extends Activity {
         } else if (winningPlayer == TicTacToeGame.Player.TIE) {
             turnSignifier.setText(R.string.tie_game);
         } else {
-            Log.e("myTag", "Error: handleVictory() called with no winning player");
+            Log.e(myTag, "Error: handleVictory() called with no winning player");
         }
     }
     //////////////////////////////////////////////////////////////////////////
@@ -338,11 +341,11 @@ public class TicTacNole extends Activity {
         if (btPlay){
             if (activePlayer.getTeam() == TicTacToeGame.Player.X) {
                 btn.setText(R.string.x_cell);
-                btControl.sendMove("X," + buttonNumber);
+                btControl.sendMove("X" + buttonNumber);
             }
             else if (activePlayer.getTeam() == TicTacToeGame.Player.O) {
                 btn.setText(R.string.o_cell);
-                btControl.sendMove("O," + buttonNumber);
+                btControl.sendMove("O" + buttonNumber);
             }
 
             btn.setClickable(false);
@@ -368,72 +371,52 @@ public class TicTacNole extends Activity {
     public void receivedThread(){
         running =  true;
 
-        (new Thread() {
+        moveReceiver = new Thread() {
 
             public void run() {
 
-                while (true) {
+                while (running) {
                     if(running){
-                        String[] rMove = new String[1];
-                        rMove = btControl.receiveMove().split(",", 2);
+                        char[] rMove;
+                        rMove = btControl.receiveMove().toCharArray();
                         receivedMove(rMove);
                     }
                     else break;
                 }
             }
-        }).start();
+        };
+        moveReceiver.start();
     }
 
     /**
-     * receives move string array from thread, then marks opponents board and lock button
+     * receives move char array from thread, then can mark oppenents board and lock button
      * @param move
      */
-    public void receivedMove(String[] move){
+    public void receivedMove(char[] move){
 
-        String mark = move[0];
+        int moveRow, moveCol;
 
-
-        if(move[1].contains("00")){
-            boardButtons[0][0].setText(mark);
-            boardButtons[0][0].setClickable(false);
-        }
-        if(move[1].contains("01")){
-            boardButtons[0][1].setText(mark);
-            boardButtons[0][1].setClickable(false);
-        }
-        if(move[1].contains("02")){
-            boardButtons[0][2].setText(mark);
-            boardButtons[0][2].setClickable(false);
-        }
-        if(move[1].contains("10")){
-            boardButtons[1][0].setText(mark);
-            boardButtons[1][0].setClickable(false);
-        }
-        if(move[1].contains("11")){
-            boardButtons[1][1].setText(mark);
-            boardButtons[1][1].setClickable(false);
-        }
-        if(move[1].contains("12")){
-            boardButtons[1][2].setText(mark);
-            boardButtons[1][2].setClickable(false);
-        }
-        if(move[1].contains("20")){
-            boardButtons[2][0].setText(mark);
-            boardButtons[2][0].setClickable(false);
-        }
-        if(move[1].contains("21")){
-            boardButtons[2][1].setText(mark);
-            boardButtons[2][1].setClickable(false);
-        }
-        if(move[1].contains("22")){
-            boardButtons[2][2].setText(mark);
-            boardButtons[2][2].setClickable(false);
+        if (Character.isDigit(move[1])) {
+            moveRow = Character.getNumericValue(move[1]);
+        } else {
+            Log.e(myTag, "Malformatted move string - cannot parse row");
+            return;
         }
 
+        if (Character.isDigit(move[2])) {
+            moveCol = Character.getNumericValue(move[2]);
+        } else {
+            Log.e(myTag, "Malformatted move string - cannot parse column");
+            return;
+        }
 
-
+        makeMove(boardButtons[moveRow][moveCol]);
     }
 
-    //TODO: create method to end received thread - can't run forever!
+    @Override
+    protected void onDestroy () {
+        running = false; //stop moveReceiver thread
+        super.onDestroy();
+    }
 
 }

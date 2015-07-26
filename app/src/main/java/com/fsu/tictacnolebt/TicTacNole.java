@@ -79,7 +79,7 @@ public class TicTacNole extends Activity {
                 boardButtons[i][j].setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        makeMove(v);
+                        makeMove(v, true);
                     }
                 });
             }
@@ -90,7 +90,7 @@ public class TicTacNole extends Activity {
 
     }
 
-    private void makeMove(View b) {
+    private void makeMove(View b, boolean isSendingPlayer) {
         Log.d(myTag, "Making move - " + activePlayer.getTeam());
 
         TicTacToeGame.CellPosition movePos;
@@ -98,39 +98,39 @@ public class TicTacNole extends Activity {
         switch (b.getId()){
             case R.id.game_top_left:
                 movePos = TicTacToeGame.CellPosition.TOP_LEFT;
-                markButton(boardButtons[0][0], "00");
+                markButton(boardButtons[0][0], "00", isSendingPlayer);
                 break;
             case R.id.game_top_center:
                 movePos = TicTacToeGame.CellPosition.TOP_CENTER;
-                markButton(boardButtons[0][1], "01");
+                markButton(boardButtons[0][1], "01", isSendingPlayer);
                 break;
             case R.id.game_top_right:
                 movePos = TicTacToeGame.CellPosition.TOP_RIGHT;
-                markButton(boardButtons[0][2], "02");
+                markButton(boardButtons[0][2], "02", isSendingPlayer);
                 break;
             case R.id.game_mid_left:
                 movePos = TicTacToeGame.CellPosition.MID_LEFT;
-                markButton(boardButtons[1][0], "10");
+                markButton(boardButtons[1][0], "10", isSendingPlayer);
                 break;
             case R.id.game_mid_center:
                 movePos = TicTacToeGame.CellPosition.MID_CENTER;
-                markButton(boardButtons[1][1], "11");
+                markButton(boardButtons[1][1], "11", isSendingPlayer);
                 break;
             case R.id.game_mid_right:
                 movePos = TicTacToeGame.CellPosition.MID_RIGHT;
-                markButton(boardButtons[1][2], "12");
+                markButton(boardButtons[1][2], "12", isSendingPlayer);
                 break;
             case R.id.game_bot_left:
                 movePos = TicTacToeGame.CellPosition.BOT_LEFT;
-                markButton(boardButtons[2][0], "20");
+                markButton(boardButtons[2][0], "20", isSendingPlayer);
                 break;
             case R.id.game_bot_center:
                 movePos = TicTacToeGame.CellPosition.BOT_CENTER;
-                markButton(boardButtons[2][1], "21");
+                markButton(boardButtons[2][1], "21", isSendingPlayer);
                 break;
             case R.id.game_bot_right:
                 movePos = TicTacToeGame.CellPosition.BOT_RIGHT;
-                markButton(boardButtons[2][2], "22");
+                markButton(boardButtons[2][2], "22", isSendingPlayer);
                 break;
             default:
                 Log.e("myTag", "Erroneous button press captured");
@@ -166,7 +166,7 @@ public class TicTacNole extends Activity {
 
                 int compMoveRow = compMove.getPos().getIndex() / 3;
                 int compMoveCol = compMove.getPos().getIndex() % 3;
-                makeMove(boardButtons[compMoveRow][compMoveCol]);
+                makeMove(boardButtons[compMoveRow][compMoveCol], isSendingPlayer);
 
 
             } else {
@@ -264,32 +264,23 @@ public class TicTacNole extends Activity {
      * Marks the button with an X or an O and sends move if connected to bluetooth
      * @param btn
      */
-    public void markButton(Button btn, String buttonNumber){
+    public void markButton(Button btn, String buttonNumber, boolean isSendingPlayer){
 
-        //bt mark
-        if (btPlay){
-            if (activePlayer.getTeam() == TicTacToeGame.Player.X) {
-                btn.setText(R.string.x_cell);
+        if (activePlayer.getTeam() == TicTacToeGame.Player.X) {
+            btn.setText(R.string.x_cell);
+            if (btPlay && isSendingPlayer) {
                 btControl.sendMove("X" + buttonNumber);
             }
-            else if (activePlayer.getTeam() == TicTacToeGame.Player.O) {
-                btn.setText(R.string.o_cell);
+        }
+        else if (activePlayer.getTeam() == TicTacToeGame.Player.O) {
+            btn.setText(R.string.o_cell);
+            if (btPlay && isSendingPlayer) {
                 btControl.sendMove("O" + buttonNumber);
             }
-
-            btn.setClickable(false);
-
-
         }
-        //non bt mark
-        else {
-            if (activePlayer.getTeam() == TicTacToeGame.Player.X)
-                btn.setText(R.string.x_cell);
-            else if (activePlayer.getTeam() == TicTacToeGame.Player.O)
-                btn.setText(R.string.o_cell);
 
-            btn.setClickable(false);
-        }
+        btn.setClickable(false);
+
     }
 
 
@@ -339,7 +330,7 @@ public class TicTacNole extends Activity {
             return;
         }
 
-        makeMove(boardButtons[moveRow][moveCol]);
+        makeMove(boardButtons[moveRow][moveCol], false);
     }
 
     @Override

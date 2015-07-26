@@ -26,6 +26,9 @@ public class GameSelectFragment extends Fragment implements View.OnClickListener
     ProgressDialog mSpinnerDialog;
     private BluetoothAdapter mBluetoothAdapter;
 
+    //used for sending message to intents creating the game
+    public final static String EXTRA_KEY = "com.fsu.tictacnolebt";
+
     @Override
     public View onCreateView (LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
@@ -72,19 +75,33 @@ public class GameSelectFragment extends Fragment implements View.OnClickListener
             // TODO: Utilize socket obtained in acceptThread.
             Toast.makeText(getActivity(), "TODO: Utilize socket obtained in acceptThread", Toast.LENGTH_SHORT).show();
 
+            //Initiate a game of Tic Tac Nole with accepting client
+            Intent intent = new Intent(getActivity(), TicTacNole.class);
+            intent.putExtra(EXTRA_KEY + ".numHumans", 2);
+            intent.putExtra(EXTRA_KEY +".role", "host");
+            startActivity(intent);
+
         }
         else if (v == mBtnPlayAsClient) {
 
             // Look for nearby Bluetooth devices hosting Tic Tac Nole.
             btConnActivity.scanForDevices();
 
-            // TODO: Initiate a game of Tic Tac Nole with accepting host.
+            //TODO - need to wait at this point
+
+            //Initiate a game of Tic Tac Nole with accepting host.
+            Intent intent = new Intent(getActivity(), TicTacNole.class);
+            intent.putExtra(EXTRA_KEY + ".numHumans", 2);
+            intent.putExtra(EXTRA_KEY + ".role", "client");
+            startActivity(intent);
 
         }
         else {
             //Single phone Tic-Tac-Nole against AI
 
             Intent intent = new Intent(getActivity(), TicTacNole.class);
+            intent.putExtra(EXTRA_KEY + ".numHumans", 1);
+            intent.putExtra(EXTRA_KEY + ".role", "host");
             startActivity(intent);
 
 

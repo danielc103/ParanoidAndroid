@@ -2,6 +2,7 @@ package com.fsu.tictacnolebt;
 
 import android.app.Activity;
 import android.app.ProgressDialog;
+import android.bluetooth.BluetoothAdapter;
 import android.content.Intent;
 import android.support.v4.app.Fragment;
 import android.os.Bundle;
@@ -50,6 +51,12 @@ public class GameSelectFragment extends Fragment implements View.OnClickListener
         BluetoothConnect btConnActivity = (BluetoothConnect)getActivity();
 
         if (v == mBtnPlayAsHost) {
+
+            BluetoothAdapter bt = BluetoothAdapter.getDefaultAdapter();
+            if(!bt.isEnabled()){
+                Toast.makeText(getActivity(), "Bluetooth denied by user", Toast.LENGTH_LONG).show();
+                return;
+            }
 
             // Create a 'Waiting for players...' message while listening for a client.
             mSpinnerDialog = new ProgressDialog(getActivity());

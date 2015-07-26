@@ -137,54 +137,10 @@ public class TicTacNole extends Activity {
                 return;
         }
 
-        //TODO - this should be ready for deletion, but test that switch statement works first [DS]
-        /*
-        if (b == findViewById(R.id.game_top_left))
-=======
-                Log.e(myTag, "Erroneous button press caputred");
-                break;
-        }
-
-        /*if (b == findViewById(R.id.game_top_left))
->>>>>>> Stashed changes
-            movePos = TicTacToeGame.CellPosition.TOP_LEFT;
-        else if (b == findViewById(R.id.game_top_center))
-            movePos = TicTacToeGame.CellPosition.TOP_CENTER;
-        else if (b == findViewById(R.id.game_top_right))
-            movePos = TicTacToeGame.CellPosition.TOP_RIGHT;
-        else if (b == findViewById(R.id.game_mid_left))
-            movePos = TicTacToeGame.CellPosition.MID_LEFT;
-        else if (b == findViewById(R.id.game_mid_center))
-            movePos = TicTacToeGame.CellPosition.MID_CENTER;
-        else if (b == findViewById(R.id.game_mid_right))
-            movePos = TicTacToeGame.CellPosition.MID_RIGHT;
-        else if (b == findViewById(R.id.game_bot_left))
-            movePos = TicTacToeGame.CellPosition.BOT_LEFT;
-        else if (b == findViewById(R.id.game_bot_center))
-            movePos = TicTacToeGame.CellPosition.BOT_CENTER;
-        else if (b == findViewById(R.id.game_bot_right))
-            movePos = TicTacToeGame.CellPosition.BOT_RIGHT;
-        else {
-            Log.e("myTag", "Erroneous button press captured");
-            return;
-        }
-<<<<<<< Updated upstream
-        */
-
         //make move in game's logic
         //the non-UI code from here down should probably be refactored into a separate method
-
-        //TODO - need to wire up Buttons to the game's TicTacToeCells somehow
         game.makeMove(game.getCurrentPlayer(), movePos);
-
-
-       /* //TODO - create a markButton method
-        if (activePlayer.getTeam() == TicTacToeGame.Player.X)
-            b.setText(R.string.x_cell);
-        else if (activePlayer.getTeam() == TicTacToeGame.Player.O)
-            b.setText(R.string.o_cell);
-
-        b.setClickable(false);*/
+        
 
         game.checkForWin();
 
@@ -200,9 +156,7 @@ public class TicTacNole extends Activity {
             if (activePlayer.getType() == TicTacToeGame.PlayerType.COMPUTER) {
                 //handle computer turn
 
-                //this code should probably be refactored into its own method (see above note)
                 Log.d(myTag, "Starting computer turn - " + activePlayer.getTeam());
-
 
                 //find the comp's best move, then recursively call this method with the comp's move;
                 //computer move will happen and finish, then the original call will finish
@@ -214,32 +168,6 @@ public class TicTacNole extends Activity {
                 int compMoveCol = compMove.getPos().getIndex() % 3;
                 makeMove(boardButtons[compMoveRow][compMoveCol]);
 
-                /*
-                 * This block of code should be redundant with recursive call to makeMove() above.
-                 * TODO - TEST THIS [DS]
-
-                //TODO - get compMove as a TicTacToeCell, then find the appropriate button somehow
-                //game.makeMove(game.getCurrentPlayer(), compMove);
-                if (activePlayer.getTeam() == TicTacToeGame.Player.X)
-                    b.setText(R.string.x_cell);
-                else if (activePlayer.getTeam() == TicTacToeGame.Player.O)
-                    b.setText(R.string.o_cell);
-
-                b.setClickable(false);
-
-                game.checkForWin();
-                if (game.getWinningPlayer() != TicTacToeGame.Player.NEITHER) {
-                    handleVictory(game.getWinningPlayer());
-                    return; //exit before setting turnSignifier
-                } else {
-                    game.nextPlayer();
-                    if (activePlayer == playerOne) {
-                        activePlayer = playerTwo;
-                    } else if (activePlayer == playerTwo) {
-                        activePlayer = playerOne;
-                    }
-                }
-                */
 
             } else {
                 //wait for human player to make a move

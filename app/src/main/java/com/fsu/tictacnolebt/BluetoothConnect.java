@@ -47,11 +47,15 @@ public class BluetoothConnect extends MainActivity {
     private ConnectThread mConnectThread;
     public AcceptThread getAcceptThread() { return mAcceptThread; }
     public ConnectThread getConnectThread() { return mConnectThread; }
+
     public void startAcceptThread() {
+
         mAcceptThread = new AcceptThread();
         mAcceptThread.start();
     }
     public void startConnectThread(BluetoothDevice device) {
+
+
         mConnectThread = new ConnectThread(device);
         mConnectThread.start();
     }

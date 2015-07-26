@@ -24,6 +24,7 @@ public class GameSelectFragment extends Fragment implements View.OnClickListener
     Button mBtnPlayAsClient;
     Button mBtnPlayWithoutBt;
     ProgressDialog mSpinnerDialog;
+    private BluetoothAdapter mBluetoothAdapter;
 
     @Override
     public View onCreateView (LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {

@@ -16,6 +16,7 @@
     <string name="replay_prompt">Play Again</string>
     <string name="credits">Created By: Paranoid Android</string>
 
-    <string name="action_settings">Settings</string>
+    <string name="avail_devices"><u>Scanning for available devices...</u></string>
+    <string name="action_settings">STRING ADDED TO ELIMINATE ERROR (-Scott)</string>
 
 </resources>

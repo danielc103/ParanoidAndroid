@@ -1,6 +1,8 @@
 package com.fsu.tictacnolebt;
 
+import android.app.Activity;
 import android.app.ProgressDialog;
+import android.content.Intent;
 import android.support.v4.app.Fragment;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -68,9 +70,12 @@ public class GameSelectFragment extends Fragment implements View.OnClickListener
                     Toast.LENGTH_SHORT).show();
         }
         else {
-            // TODO: Single phone Tic-Tac-Nole goes here.
-            Toast.makeText(getActivity(), "TODO: Implement Single Phone Tic-Tac-Nole",
-                    Toast.LENGTH_SHORT).show();
+            //Single phone Tic-Tac-Nole against AI
+
+            Intent intent = new Intent(getActivity(), TicTacNole.class);
+            startActivity(intent);
+
+
         }
     }
 

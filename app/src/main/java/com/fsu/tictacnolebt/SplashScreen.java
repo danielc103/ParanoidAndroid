@@ -36,7 +36,7 @@ public class SplashScreen extends Activity{
 
                 //starts if back button not pressed, new intent here
                 if (!mIsBackButtonPressed) {
-                    Intent intent = new Intent(SplashScreen.this, MainActivity.class);
+                    Intent intent = new Intent(SplashScreen.this, BluetoothConnect.class);
                     SplashScreen.this.startActivity(intent);
                 }
 

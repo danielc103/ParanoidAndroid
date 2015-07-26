@@ -1,5 +1,6 @@
 package com.fsu.tictacnolebt;
 
+import android.app.Activity;
 import android.app.ProgressDialog;
 import android.support.v4.app.Fragment;
 import android.os.Bundle;
@@ -8,6 +9,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.Toast;
+
+import com.fsu.tictacnolebt.BluetoothConnect;
 
 /**
  * Created by Quothmar on 7/7/2015.
@@ -43,6 +46,7 @@ public class GameSelectFragment extends Fragment implements View.OnClickListener
     public void onClick(View v) {
 
         Fragment nextFragment;   // to be used for next screen (scanned server list, solo TTN, ...)
+        BluetoothConnect btConnActivity = (BluetoothConnect)getActivity();
 
         if (v == mBtnPlayAsHost) {
 
@@ -52,22 +56,24 @@ public class GameSelectFragment extends Fragment implements View.OnClickListener
             mSpinnerDialog.setTitle("Waiting for players...");
             mSpinnerDialog.show();
 
-            // TODO: Bluetooth listen-for-client implementation.
-            Toast.makeText(getActivity(), "TODO: Implement Bluetooth Listen-For-Client",
-                    Toast.LENGTH_SHORT).show();
+            // Begin accepting requests from clients.
+            // [SOURCE] http://stackoverflow.com/questions/9212574/calling-activity-methods-from-fragment
+            btConnActivity.startAcceptThread();
 
-            /* // Possibly to be deleted (see note at player_wait.xml).
-            nextFragment = new PlayerWaitFragment();
-            getFragmentManager().beginTransaction().replace(R.id.fragment_container,
-                    nextFragment).commit();
-            */
+            // TODO: Utilize socket obtained in acceptThread.
+            Toast.makeText(getActivity(), "TODO: Utilize socket obtained in acceptThread", Toast.LENGTH_SHORT).show();
+
         }
         else if (v == mBtnPlayAsClient) {
-            // TODO: Bluetooth scan-for-servers implementation.
-            Toast.makeText(getActivity(), "TODO: Implement Bluetooth Scan",
-                    Toast.LENGTH_SHORT).show();
+
+            // Look for nearby Bluetooth devices hosting Tic Tac Nole.
+            btConnActivity.scanForDevices();
+
+            // TODO: Initiate a game of Tic Tac Nole with accepting host.
+
         }
         else {
+
             // TODO: Single phone Tic-Tac-Nole goes here.
             Toast.makeText(getActivity(), "TODO: Implement Single Phone Tic-Tac-Nole",
                     Toast.LENGTH_SHORT).show();

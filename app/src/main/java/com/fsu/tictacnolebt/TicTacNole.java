@@ -299,7 +299,7 @@ public class TicTacNole extends Activity {
                     if(running){
                         char[] rMove;
                         rMove = btControl.receiveMove().toCharArray();
-                        receivedMove(rMove);
+                        receiveMove(rMove);
                     }
                     else break;
                 }
@@ -312,7 +312,7 @@ public class TicTacNole extends Activity {
      * receives move char array from thread, then can mark oppenents board and lock button
      * @param move
      */
-    public void receivedMove(char[] move){
+    public void receiveMove(char[] move){
 
         int moveRow, moveCol;
 

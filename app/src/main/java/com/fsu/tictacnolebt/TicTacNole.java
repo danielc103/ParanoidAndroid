@@ -232,6 +232,8 @@ public class TicTacNole extends Activity {
     }
 
     private void newGame () {
+        Log.d(myTag, "Setting up game as role: " + role);
+
         game = new TicTacToeGame();
 
         turnSignifier.setText(R.string.x_prompt);

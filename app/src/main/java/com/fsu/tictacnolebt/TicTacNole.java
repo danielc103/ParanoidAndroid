@@ -86,6 +86,11 @@ public class TicTacNole extends Activity {
             @Override
             public void onClick(View v) {
                 newGame();
+
+                //send message to indicate new game
+                if (btPlay) {
+                    btControl.sendMove("N");
+                }
             }
         });
 
@@ -358,37 +363,45 @@ public class TicTacNole extends Activity {
     public void receiveMove(char[] move){
         Log.d(myTag, "Receiving move: " + move);
 
-        final int moveRow, moveCol;
-
-
-
-        if (Character.isDigit(move[1])) {
-            moveRow = Character.getNumericValue(move[1]);
-        } else {
-            Log.e(myTag, "Malformatted move string - cannot parse row");
-            return;
-        }
-
-        if (Character.isDigit(move[2])) {
-            moveCol = Character.getNumericValue(move[2]);
-        } else {
-            Log.e(myTag, "Malformatted move string - cannot parse column");
-            return;
-        }
-
-        Log.d(myTag, "Making received move");
-
-        runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-                makeMove(boardButtons[moveRow][moveCol], false);
-
-                if (btPlay) {
-                    receiveControl();
+        if (move[0] == 'n') {
+            runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    newGame();
                 }
-            }
-        });
+            });
+        } else {
 
+            final int moveRow, moveCol;
+
+
+            if (Character.isDigit(move[1])) {
+                moveRow = Character.getNumericValue(move[1]);
+            } else {
+                Log.e(myTag, "Malformatted move string - cannot parse row");
+                return;
+            }
+
+            if (Character.isDigit(move[2])) {
+                moveCol = Character.getNumericValue(move[2]);
+            } else {
+                Log.e(myTag, "Malformatted move string - cannot parse column");
+                return;
+            }
+
+            Log.d(myTag, "Making received move");
+
+            runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    makeMove(boardButtons[moveRow][moveCol], false);
+
+                    if (btPlay) {
+                        receiveControl();
+                    }
+                }
+            });
+        }
 
     }
 

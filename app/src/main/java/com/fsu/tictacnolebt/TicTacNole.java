@@ -341,14 +341,10 @@ public class TicTacNole extends Activity {
             public void run() {
 
                 while (running) {
-                    runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-                            char[] rMove;
-                            rMove = btControl.receiveMove().toCharArray();
-                            receiveMove(rMove);
-                        }
-                    });
+                    char[] rMove;
+                    rMove = btControl.receiveMove().toCharArray();
+                    receiveMove(rMove);
+
                 }
             }
         };

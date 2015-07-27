@@ -44,7 +44,7 @@ public class TicTacNole extends Activity {
     //Bluetooth game logic
     boolean btPlay = false;
     BluetoothControl btControl;
-    //Recieved thread boolean statement
+    //Received thread boolean statement
     boolean running = false;
     Thread moveReceiver; //receives moves from other device over BT
 
@@ -109,6 +109,10 @@ public class TicTacNole extends Activity {
         //initialize game logic
         newGame();
 
+        //start move receiver thread for BT games
+        if (btPlay) {
+            receivedThread();
+        }
     }
 
     private void makeMove(View b, boolean isSendingPlayer) {
@@ -337,12 +341,9 @@ public class TicTacNole extends Activity {
             public void run() {
 
                 while (running) {
-                    if(running){
-                        char[] rMove;
-                        rMove = btControl.receiveMove().toCharArray();
-                        receiveMove(rMove);
-                    }
-                    else break;
+                    char[] rMove;
+                    rMove = btControl.receiveMove().toCharArray();
+                    receiveMove(rMove);
                 }
             }
         };

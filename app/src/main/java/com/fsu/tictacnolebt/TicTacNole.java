@@ -427,18 +427,20 @@ public class TicTacNole extends Activity {
     //receive control from other player
     private void receiveControl() {
 
-        turnSignifier.setText(turnSignifier.getText() + "; Your turn!");
+        if (game.getWinningPlayer() == TicTacToeGame.Player.NEITHER) {
 
-        for (int i = 0; i < 3; ++i) {
-            for (int j = 0; j < 3; ++j) {
-                if (boardButtons[i][j].getText().equals("")) {
-                    boardButtons[i][j].setClickable(true);
+            turnSignifier.setText(turnSignifier.getText() + "; Your turn!");
+
+            for (int i = 0; i < 3; ++i) {
+                for (int j = 0; j < 3; ++j) {
+                    if (boardButtons[i][j].getText().equals("")) {
+                        boardButtons[i][j].setClickable(true);
+                    }
+
+
                 }
-
-
             }
         }
-
     }
 
 }

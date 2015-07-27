@@ -357,7 +357,7 @@ public class TicTacNole extends Activity {
     public void receiveMove(char[] move){
         Log.d(myTag, "Receiving move: " + move);
 
-        int moveRow, moveCol;
+        final int moveRow, moveCol;
 
 
 
@@ -376,11 +376,19 @@ public class TicTacNole extends Activity {
         }
 
         Log.d(myTag, "Making received move");
-        makeMove(boardButtons[moveRow][moveCol], false);
 
-        if (btPlay) {
-            receiveControl();
-        }
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                makeMove(boardButtons[moveRow][moveCol], false);
+
+                if (btPlay) {
+                    receiveControl();
+                }
+            }
+        });
+
+
     }
 
     @Override

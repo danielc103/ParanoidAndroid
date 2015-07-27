@@ -352,6 +352,7 @@ public class TicTacNole extends Activity {
      * @param move
      */
     public void receiveMove(char[] move){
+        Log.d(myTag, "Receiving move: " + move);
 
         int moveRow, moveCol;
 
@@ -371,6 +372,7 @@ public class TicTacNole extends Activity {
             return;
         }
 
+        Log.d(myTag, "Making received move");
         makeMove(boardButtons[moveRow][moveCol], false);
 
         if (btPlay) {
